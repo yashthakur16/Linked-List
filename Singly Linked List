@@ -1,0 +1,147 @@
+#include<iostream>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    Node *nextnode;
+
+    Node(int data)
+    {
+        this->data=data;
+        this->nextnode=NULL;
+    }
+};
+
+void inserthead(Node* &head,int d)
+{
+    Node* temp=new Node(d);
+    temp->nextnode=head;
+    head=temp;
+}
+
+void inserttail(Node* &tail,int d)
+{
+    Node* temp=new Node(d);
+    tail->nextnode=temp;
+    tail=temp;
+}
+
+void insertmiddle(Node* &head,Node* &tail,int position,int d)
+{
+    if(position==1)
+    {
+        inserthead(head,d);
+        return;
+    }
+
+    int cnt=1;
+
+    Node* temp=head;
+    while(cnt<position-1)
+    {
+        temp=temp->nextnode;
+        cnt++;
+    }
+
+    if(temp->nextnode==NULL)
+    {
+        inserttail(tail,d);
+        return;
+    }
+
+    Node* insertposition=new Node(d);
+
+    insertposition->nextnode=temp->nextnode;
+    temp->nextnode=insertposition;
+}
+
+void deleteatposition(Node* &head,int position,Node* &tail)
+{
+    if(position==1)
+    {
+        Node* temp=head;
+        head=head->nextnode;
+        temp->nextnode=NULL;
+        delete temp;
+    }
+    else
+    {
+        int cnt=1;
+        Node* current=head;
+        Node* previous=NULL;
+
+        while(cnt<position)
+        {
+            previous=current;
+            current=current->nextnode;
+            cnt++;
+        }
+
+        previous->nextnode=current->nextnode;
+        if(previous->nextnode==NULL)
+        {
+            tail=previous;
+        }
+        
+        current->nextnode=NULL;
+        delete current;
+    }
+}
+
+void print(Node* &head)
+{
+    Node* temp=head;
+    while(temp!=NULL)
+    {
+        cout<<temp->data<<" ";
+        temp=temp->nextnode;
+    }
+    cout<<endl;
+}
+
+int main()
+{
+
+    Node* node1=new Node(10);
+    Node* head=node1;
+    Node* tail=node1;
+    print(head);
+    inserthead(head,20);
+    print(head);
+    inserttail(tail,30);
+    print(head);
+
+    insertmiddle(head,tail,3,40);
+    print(head);
+
+    insertmiddle(head,tail,5,60);
+    print(head);
+
+    cout<<"Head : "<<head->data<<endl;
+    cout<<"Tail : "<<tail->data<<endl;
+
+    deleteatposition(head,1,tail);
+
+    print(head);
+
+    cout<<"Head : "<<head->data<<endl;
+    cout<<"Tail : "<<tail->data<<endl;
+
+    deleteatposition(head,4,tail);
+
+    print(head);
+
+    cout<<"Head : "<<head->data<<endl;
+    cout<<"Tail : "<<tail->data<<endl;
+
+    deleteatposition(head,2,tail);
+
+    print(head);
+
+    cout<<"Head : "<<head->data<<endl;
+    cout<<"Tail : "<<tail->data<<endl;
+    
+    return 0;
+}
